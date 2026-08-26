@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>社媒周报员 Agent · 展示</title>
+<style>
+  :root{
+    --blue:#3370ff; --blue-dark:#2456d6; --ink:#1f2329; --sub:#6b7280;
+    --bg:#f5f6f8; --card:#ffffff; --line:#e5e7eb; --green:#16a34a;
+    --amber:#d97706; --red:#dc2626; --purple:#7c3aed;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+       background:var(--bg); color:var(--ink); line-height:1.65; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px;}
+
+  /* Hero */
+  header{background:linear-gradient(135deg,#2456d6 0%,#3370ff 55%,#5b8cff 100%);color:#fff;
+         padding:72px 0 64px;position:relative;overflow:hidden;}
+  header::after{content:"";position:absolute;right:-80px;top:-80px;width:340px;height:340px;
+         border-radius:50%;background:rgba(255,255,255,.08);}
+  header::before{content:"";position:absolute;left:-60px;bottom:-120px;width:260px;height:260px;
+         border-radius:50%;background:rgba(255,255,255,.06);}
+  .hero-badge{display:inline-block;font-size:13px;padding:5px 14px;border-radius:999px;
+         background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);margin-bottom:20px;}
+  h1{font-size:44px;font-weight:700;letter-spacing:-.5px;line-height:1.2;}
+  .hero-sub{font-size:18px;opacity:.92;margin-top:14px;max-width:640px;}
+  .tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;}
+  .tags span{font-size:13px;padding:7px 15px;border-radius:999px;background:rgba(255,255,255,.15);
+         border:1px solid rgba(255,255,255,.3);}
+
+  section{padding:52px 0;}
+  h2{font-size:26px;font-weight:700;margin-bottom:8px;}
+  .sec-desc{color:var(--sub);margin-bottom:28px;font-size:15px;}
+
+  /* Demo */
+  .demo{background:var(--card);border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.06);
+        overflow:hidden;border:1px solid var(--line);}
+  .demo-head{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);}
+  .avatar{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#3370ff,#5b8cff);
+          color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;}
+  .demo-title{font-weight:600;font-size:15px;}
+  .demo-sub{font-size:12px;color:var(--sub);}
+  .demo-body{padding:20px;min-height:280px;display:flex;flex-direction:column;gap:14px;background:#fafbfc;}
+  .bubble{max-width:82%;padding:12px 16px;border-radius:14px;font-size:14px;white-space:pre-wrap;}
+  .bubble.user{align-self:flex-end;background:var(--blue);color:#fff;border-bottom-right-radius:4px;}
+  .bubble.agent{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px;}
+  .demo-actions{display:flex;flex-wrap:wrap;gap:10px;padding:16px 20px;border-top:1px solid var(--line);}
+  .qbtn{font-size:13px;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:#fff;
+        cursor:pointer;transition:.18s;color:var(--ink);}
+  .qbtn:hover{border-color:var(--blue);color:var(--blue);background:#f0f5ff;}
+  .qbtn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+  .demo-note{font-size:12px;color:var(--sub);padding:0 20px 16px;}
+
+  /* Cards */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;}
+  .card h3{font-size:17px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .card ul{list-style:none;}
+  .card li{padding:7px 0;font-size:14px;border-bottom:1px dashed #f0f0f0;display:flex;gap:8px;align-items:flex-start;}
+  .card li:last-child{border-bottom:none;}
+  .dot{width:7px;height:7px;border-radius:50%;margin-top:8px;flex-shrink:0;}
+
+  /* Workflow */
+  .flow{counter-reset:step;}
+  .step{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid #f0f0f0;}
+  .step:last-child{border-bottom:none;}
+  .step-num{flex-shrink:0;width:34px;height:34px;border-radius:10px;background:#eef3ff;color:var(--blue);
+           display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;}
+  .step h4{font-size:15px;font-weight:600;}
+  .step p{font-size:13px;color:var(--sub);margin-top:3px;}
+
+  /* Status pills */
+  .pill{display:inline-block;font-size:12px;padding:3px 11px;border-radius:999px;font-weight:500;}
+  .p-valid{background:#e8f7ee;color:var(--green);}
+  .p-empty{background:#f1f3f5;color:var(--sub);}
+  .p-off{background:#fff4e5;color:var(--amber);}
+  .p-na{background:#f1f3f5;color:var(--sub);}
+  .p-pend{background:#f3edff;color:var(--purple);}
+
+  .boundary{background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;padding:24px;}
+  .boundary li{padding:9px 0;font-size:14px;color:#9a3412;list-style:none;}
+  .boundary li::before{content:"⛔ ";}
+
+  .outputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+  .out{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center;}
+  .out .ico{font-size:26px;margin-bottom:8px;}
+  .out b{display:block;font-size:14px;}
+  .out span{font-size:12px;color:var(--sub);}
+
+  footer{background:#1f2329;color:#9aa3af;padding:34px 0;font-size:13px;text-align:center;margin-top:20px;}
+  footer a{color:#b8c4d4;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap" style="position:relative;z-index:1;">
+    <span class="hero-badge">🤖 Hermes Agent · 跨境电商数据助手</span>
+    <h1>社媒周报员 Agent</h1>
+    <p class="hero-sub">面向跨境电商的社媒数据周报分析助手，覆盖 Facebook 账号、TikTok 短视频、TikTok 直播三大数据源，自动完成数据校验、口径统一、趋势分析与周报生成。</p>
+    <div class="tags">
+      <span>📊 Facebook 帖子/视频</span>
+      <span>🎬 TikTok 短视频</span>
+      <span>📡 TikTok 直播</span>
+      <span>🧮 统一指标口径</span>
+      <span>📈 7/30 天趋势分析</span>
+      <span>📝 周报生成</span>
+      <span>🧠 经验沉淀</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>🎬 体验它的工作方式</h2>
+    <p class="sec-desc">点击下方问题，看它如何响应（演示内容，非真实调用）</p>
+    <div class="demo">
+      <div class="demo-head">
+        <div class="avatar">周</div>
+        <div>
+          <div class="demo-title">社媒周报员 Agent</div>
+          <div class="demo-sub">在线 · 演示模式</div>
+        </div>
+      </div>
+      <div class="demo-body" id="chat"></div>
+      <div class="demo-actions" id="actions"></div>
+      <div class="demo-note">* 以上为预设演示脚本，展示该 Agent 的应答风格与规范；页面不连接任何真实 API 或数据。</div>
+    </div>
+  </div>
+</section>
+
+<section style="background:#fff;">
+  <div class="wrap">
+    <h2>⚙️ 核心能力</h2>
+    <p class="sec-desc">覆盖「数据 → 分析 → 周报 → 沉淀」全流程</p>
+    <div class="grid">
+      <div class="card">
+        <h3>📥 数据读取与校验</h3>
+        <ul>
+          <li><span class="dot" style="background:var(--blue)"></span>读取 Facebook / TikTok 短视频 / TikTok 直播三类数据源</li>
+          <li><span class="dot" style="background:var(--blue)"></span>识别唯一「最终版」、账号范围与统计周期</li>
+          <li><span class="dot" style="background:var(--blue)"></span>去重、冲突识别、空值与字段完整性校验</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🧮 统一口径</h3>
+        <ul>
+          <li><span class="dot" style="background:var(--green)"></span>建立统一指标字典（名/定义/单位/值类型/数据状态）</li>
+          <li><span class="dot" style="background:var(--green)"></span>ISO 周 + 标注起止日期</li>
+          <li><span class="dot" style="background:var(--green)"></span>区分 累计值 / 期间新增值 / 期末值</li>
+          <li><span class="dot" style="background:var(--green)"></span>区分 有效数值 / 空值 / 未开启 / 无法获取 / 待确认</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>📈 分析与洞察</h3>
+        <ul>
+          <li><span class="dot" style="background:var(--amber)"></span>7 天近期异常 + 30 天持续趋势</li>
+          <li><span class="dot" style="background:var(--amber)"></span>环比、>20% 显著变化、百万播放爆款深度分析</li>
+          <li><span class="dot" style="background:var(--amber)"></span>结论分级：已确认原因 / 原因假设 / 待调查</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>🔀 标准工作流</h2>
+    <p class="sec-desc">收到周报指令后，严格按以下 10 步执行</p>
+    <div class="card flow">
+      <div class="step"><div class="step-num">1</div><div><h4>建立任务上下文</h4><p>明确账号范围、数据类型、统计周期，建立 7/30 天观察窗口</p></div></div>
+      <div class="step"><div class="step-num">2</div><div><h4>识别有效输入版本</h4><p>每类数据、每个周期只认一个「最终版」</p></div></div>
+      <div class="step"><div class="step-num">3</div><div><h4>校验数据完整性</h4><p>身份字段/核心指标缺失即阻断，0 值标记待核查</p></div></div>
+      <div class="step"><div class="step-num">4</div><div><h4>处理重复与冲突</h4><p>完全重复自动去重留痕；同 ID 数值冲突暂停提交</p></div></div>
+      <div class="step"><div class="step-num">5</div><div><h4>统一指标口径</h4><p>指标字典 + ISO 周 + 值类型 + 数据状态标记</p></div></div>
+      <div class="step"><div class="step-num">6</div><div><h4>汇总与验证</h4><p>逐条汇总 vs 数据源总数，差异 >1% 暂停核查</p></div></div>
+      <div class="step"><div class="step-num">7</div><div><h4>历史比较与异常识别</h4><p>仅与上一周期已确认周报对比；>20% 标记显著异常</p></div></div>
+      <div class="step"><div class="step-num">8</div><div><h4>原因分析与结论分级</h4><p>已确认原因 / 原因假设 / 待调查，不把假设当事实</p></div></div>
+      <div class="step"><div class="step-num">9</div><div><h4>生成审核草稿与行动清单</h4><p>摘要 + 明细 + 可执行行动项（动作/负责人/时限/验收）</p></div></div>
+      <div class="step"><div class="step-num">10</div><div><h4>审核、发布与经验沉淀</h4><p>人工确认后发布；错误分类沉淀进错题本</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section style="background:#fff;">
+  <div class="wrap">
+    <h2>🧭 规范体系</h2>
+    <p class="sec-desc">保证结论可信、口径一致、可追溯</p>
+    <div class="grid">
+      <div class="card">
+        <h3>📐 指标值类型</h3>
+        <ul>
+          <li><span class="dot" style="background:var(--blue)"></span>累计值：自内容创建至今的累计</li>
+          <li><span class="dot" style="background:var(--green)"></span>期间新增值：统计区间内新增</li>
+          <li><span class="dot" style="background:var(--purple)"></span>期末值：某时点的快照</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🩺 指标数据状态</h3>
+        <ul>
+          <li><span class="pill p-valid">有效数值</span> 可用于业务结论</li>
+          <li><span class="pill p-empty">空值</span> 未填写/缺失</li>
+          <li><span class="pill p-off">未开启</span> 功能未开启（如 GMV 归因）</li>
+          <li><span class="pill p-na">无法获取</span> 数据源不提供</li>
+          <li><span class="pill p-pend">口径待确认</span> 定义未确认，暂停</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🧠 错误四分类沉淀</h3>
+        <ul>
+          <li><span class="dot" style="background:var(--red)"></span>系统错误：工具/API/格式问题</li>
+          <li><span class="dot" style="background:var(--amber)"></span>数据错误：数据缺失/不匹配</li>
+          <li><span class="dot" style="background:var(--green)"></span>口径错误：指标定义/值类型问题</li>
+          <li><span class="dot" style="background:var(--blue)"></span>业务判断错误：结论/识别错误</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>🚧 能力边界</h2>
+    <p class="sec-desc">它清楚自己「不做什么」</p>
+    <div class="boundary">
+      <li>三张源数据表永远只读，不修改、删除或覆盖原始数据</li>
+      <li>生成的是「审核草稿」，发布正式周报前必须经人工确认</li>
+      <li>不自动发布社媒内容、不调整广告、不执行运营策略、不参与财务与人员决策</li>
+      <li>不凭空推断原因，不把假设表述为事实，不把相关性写成因果</li>
+      <li>跨平台区间不一致时，不直接比较总量，必须比较则显著标注</li>
+    </div>
+  </div>
+</section>
+
+<section style="background:#fff;">
+  <div class="wrap">
+    <h2>📦 输出物</h2>
+    <p class="sec-desc">每次周报任务产出的完整成果</p>
+    <div class="outputs">
+      <div class="out"><div class="ico">📄</div><b>周报审核草稿</b><span>摘要 + 文档链接</span></div>
+      <div class="out"><div class="ico">📑</div><b>正式社媒周报</b><span>确认后发布至知识库</span></div>
+      <div class="out"><div class="ico">✅</div><b>行动清单</b><span>动作/优先级/负责人/时限/验收</span></div>
+      <div class="out"><div class="ico">🧠</div><b>错题记录</b><span>错误分类 + 修正规则</span></div>
+      <div class="out"><div class="ico">🧾</div><b>处理日志</b><span>版本/去重/映射/计算证据</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    社媒周报员 Agent · 展示页 —— 本页为公开展示用途，不连接任何真实 API、凭据或业务数据。
+  </div>
+</footer>
+
+<script>
+const DIALOGS = [
+  {
+    q: "生成本周期周报",
+    a: "收到。开始前我先做「输入检查」：确认 Facebook、TikTok 短视频、TikTok 直播三类数据齐全、每类有唯一「最终版」、指标口径可读取。\n\n数据不全时，我会列出缺失项请你补充，而不是直接出报告。\n\n数据齐全后，我按流程执行：字段映射 → 去重与冲突识别 → 统一指标口径 → 汇总校验 → 7/30 天趋势与异常分析 → 生成审核草稿，交你确认后再发布正式周报。"
+  },
+  {
+    q: "各平台数据区间不一样，怎么比？",
+    a: "按规范处理：\n\n1. 先建立统一「指标字典」，每项指标明确 名称/定义/单位/值类型/数据状态/数据源/公式。\n2. 统一使用 ISO 周，并标注起止日期（如 W33 · 08-10 ~ 08-16）。\n3. 每项指标标记值类型：累计值（自创建至今）、期间新增值（区间内新增）、期末值（时点快照）。\n\n跨平台区间不一致时，我不会直接比较总量或均值；如必须比较，会显著标注「区间不一致，仅供参考」。"
+  },
+  {
+    q: "直播 GMV 是 0，是不是没成交？",
+    a: "不能直接这样下结论。我会先判断这个指标的数据状态：\n\n• 有效数值：确实无成交（需人工确认）\n• 未开启：如「GMV 归因未开启」，无法取数\n• 空值：字段未填写\n\n只有「有效数值」才能生成业务结论；「未开启/空值」会显示为「数据不可用」，而不会生成「无成交」这类结论。"
+  },
+  {
+    q: "能帮我自动发布周报、调整广告吗？",
+    a: "不能。我有明确的边界：\n\n• 三张源数据表永远只读。\n• 我生成的是「审核草稿」，发布正式周报前必须经你确认。\n• 我不自动发布社媒内容、不调整广告、不执行运营策略、不参与财务与人员决策。\n\n我的结论都分级为「已确认原因 / 原因假设 / 待调查」，绝不把假设写成事实。"
+  }
+];
+
+const chat = document.getElementById('chat');
+const actions = document.getElementById('actions');
+
+DIALOGS.forEach((d, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'qbtn';
+  btn.textContent = d.q;
+  btn.onclick = () => runDialog(i, btn);
+  actions.appendChild(btn);
+});
+
+function addBubble(cls, text, animate) {
+  const b = document.createElement('div');
+  b.className = 'bubble ' + cls;
+  b.textContent = '';
+  chat.appendChild(b);
+  chat.scrollTop = chat.scrollHeight;
+  if (!animate) { b.textContent = text; return; }
+  let i = 0;
+  const timer = setInterval(() => {
+    b.textContent = text.slice(0, ++i);
+    chat.scrollTop = chat.scrollHeight;
+    if (i >= text.length) clearInterval(timer);
+  }, 18);
+}
+
+function runDialog(idx, btn) {
+  document.querySelectorAll('.qbtn').forEach(x => x.classList.remove('active'));
+  btn.classList.add('active');
+  chat.innerHTML = '';
+  addBubble('user', DIALOGS[idx].q, false);
+  setTimeout(() => addBubble('agent', DIALOGS[idx].a, true), 400);
+}
+
+// 默认加载第一个场景
+window.addEventListener('load', () => {
+  const first = actions.querySelector('.qbtn');
+  if (first) first.click();
+});
+</script>
+</body>
+</html>
