@@ -89,6 +89,26 @@
   .out b{display:block;font-size:14px;}
   .out span{font-size:12px;color:var(--sub);}
 
+  /* Onboarding */
+  .onboard{display:flex;justify-content:center;}
+  .onboard-msg{max-width:680px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  .onboard-head{background:#eef3ff;color:var(--blue-dark);font-size:13px;font-weight:600;padding:12px 18px;border-bottom:1px solid var(--line);}
+  .onboard-body{padding:20px 22px;font-size:14px;line-height:1.7;}
+  .onboard-body p{margin-bottom:10px;}
+  .onboard-body ul{margin:0 0 10px 18px;}
+  .onboard-body li{margin-bottom:4px;}
+  .onboard-body a{color:var(--blue);font-weight:600;text-decoration:none;}
+  .onboard-body a:hover{text-decoration:underline;}
+
+  /* Save table */
+  .table-card{padding:0;overflow:hidden;}
+  .save-table{width:100%;border-collapse:collapse;font-size:14px;}
+  .save-table th{background:#f0f5ff;color:var(--blue-dark);text-align:left;padding:12px 16px;font-weight:600;}
+  .save-table td{padding:11px 16px;border-bottom:1px solid #f0f0f0;vertical-align:top;}
+  .save-table tr:last-child td{border-bottom:none;}
+  .save-table td:first-child{font-weight:600;white-space:nowrap;}
+  .save-table td:nth-child(2){color:var(--sub);}
+
   footer{background:#1f2329;color:#9aa3af;padding:34px 0;font-size:13px;text-align:center;margin-top:20px;}
   footer a{color:#b8c4d4;}
 </style>
@@ -111,6 +131,67 @@
     </div>
   </div>
 </header>
+
+<section>
+  <div class="wrap">
+    <h2>👋 首次接触 · 自动介绍</h2>
+    <p class="sec-desc">同事第一次 @ 本 Agent、或第一次私聊时，会自动收到一段「简短使用说明书」+ 完整手册链接，无需手动介绍。</p>
+    <div class="onboard">
+      <div class="onboard-msg">
+        <div class="onboard-head">自动发送的简短说明（示例）</div>
+        <div class="onboard-body">
+          <p>👋 你好！我是 <b>社媒周报员 Agent</b>，帮你处理 <b>Facebook、TikTok 短视频、TikTok 直播</b> 的周报数据。</p>
+          <p><b>一句话</b>：把「数据搬运 + 表格计算 + 周报撰写」这些重复体力活自动化，你只负责「审和决策」。</p>
+          <p><b>能帮你做的三件事</b>：</p>
+          <ul>
+            <li>📥 自动读取三类数据，去重、查空值、校验完整性</li>
+            <li>🧮 统一各平台指标口径，汇总并校验差异</li>
+            <li>📝 几分钟出周报草稿（摘要 + 明细 + 行动清单），你确认后才发布</li>
+          </ul>
+          <p><b>怎么开始</b>：把数据表（CSV/XLSX/飞书多维表链接）发我，说一句「<b>生成本周期周报</b>」即可。</p>
+          <p><b>边界</b>：源数据只读；发布前必须你确认；不自动发内容、不调广告；数据缺失就列出来请你补，绝不编数。</p>
+          <p>📖 完整使用说明书：<a href="https://kixin-hx.feishu.cn/docx/EGm7duy8UoK680xkyuWcFuM1nTd" target="_blank" rel="noopener">查看完整手册 ↗</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:#fff;">
+  <div class="wrap">
+    <h2>💡 它能帮你省下什么</h2>
+    <p class="sec-desc">一份三平台周报，从「收集 → 清洗 → 计算 → 成稿」通常要 2~3 小时，Agent 几分钟出草稿，你只需花 10~20 分钟审核确认。</p>
+    <div class="card table-card">
+      <table class="save-table">
+        <thead><tr><th>环节</th><th>原来人工要做的</th><th>Agent 自动做</th></tr></thead>
+        <tbody>
+          <tr><td>数据收集</td><td>从 FB/TikTok 后台逐个导出、手工粘表</td><td>自动读取 CSV/XLSX/多维表</td></tr>
+          <tr><td>数据清洗</td><td>肉眼查重、查空值、查字段缺失</td><td>自动去重、识别冲突、校验完整性</td></tr>
+          <tr><td>口径统一</td><td>手动对齐各平台指标、周定义、值类型</td><td>自动建指标字典、ISO 周、标记累计/期间/期末</td></tr>
+          <tr><td>计算汇总</td><td>手算播放量/点赞/互动率/环比</td><td>自动汇总、环比、差异率校验(&gt;1% 暂停)</td></tr>
+          <tr><td>趋势分析</td><td>手动拉 7/30 天、找异常、找爆款</td><td>自动识别 &gt;20% 变化、百万播放深度分析</td></tr>
+          <tr><td>写周报</td><td>花 1~2 小时写报告</td><td>几分钟出草稿（摘要 + 明细 + 行动清单）</td></tr>
+          <tr><td>发布归档</td><td>手动整理、归档</td><td>确认后自动发布到知识库、规范命名</td></tr>
+          <tr><td>经验沉淀</td><td>教训靠人记、易忘</td><td>自动分类登记错题本，防止再犯</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>🕹️ 怎么用 · 四步</h2>
+    <p class="sec-desc">从拿到数据到正式发布，只需四步</p>
+    <div class="card flow">
+      <div class="step"><div class="step-num">1</div><div><h4>准备数据</h4><p>从 Facebook / TikTok 后台导出数据（CSV/XLSX），或维护在飞书多维表里</p></div></div>
+      <div class="step"><div class="step-num">2</div><div><h4>发给 Agent</h4><p>把文件或表格链接发来，说一句「生成本周期周报」</p></div></div>
+      <div class="step"><div class="step-num">3</div><div><h4>审草稿</h4><p>Agent 发来审核草稿（摘要 + 文档链接），你审阅、指出要改的地方</p></div></div>
+      <div class="step"><div class="step-num">4</div><div><h4>确认发布</h4><p>你说「确认」，Agent 才发布正式周报到知识库</p></div></div>
+    </div>
+    <p class="sec-desc" style="margin-top:16px;">触发方式：说「生成周报」「汇报 Facebook + TikTok 账号及直播数据周报」等均可。数据格式：支持 <code>.csv</code> / <code>.xlsx</code> 文件，或飞书多维表链接。</p>
+  </div>
+</section>
 
 <section>
   <div class="wrap">
